@@ -10,6 +10,15 @@ START_PORT = 8080
 MAX_TRIES = 20
 
 class LoggableHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        # Redirect root path to FILENAME
+        if self.path == "/" or self.path == "":
+            self.send_response(302)
+            self.send_header("Location", f"/{FILENAME}")
+            self.end_headers()
+            return
+        else:
+            super().do_GET()
     def do_POST(self):
         if self.path == "/log":
             length = int(self.headers.get("Content-Length", 0))
